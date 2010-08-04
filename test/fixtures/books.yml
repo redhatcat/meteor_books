@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  id: 1
+  title: Hyperion
+  isbn: "0-553-28368-5"
+  publish_date: 1989-06-01
+
+two:
+  id: 2
+  title: Dune
+  isbn: "0-441-17271-7"
+  publish_date: 1965-01-01
