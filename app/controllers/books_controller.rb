@@ -1,4 +1,52 @@
 class BooksController < ApplicationController
+  include MeteorCrud
+  include NamedCellCrud
+
+  def meteor_specs
+    h = {}
+    spec = meteor_spec
+    h[spec.name] = spec
+    h
+  end
+
+  def meteor_spec
+    Meteor::NamedCellSpec.new do |spec|
+      spec.klass = Book
+      spec.controller_class = self.class
+      spec.name = "book_details"
+      spec.title = "Book Details"
+
+      spec.rows.push(
+        Meteor::NamedCellRow.new do |row|
+          row.cell_list.push(
+            Meteor::NamedCellColumn.new do |col|
+              col.type = :scalar
+              col.name = :title
+              col.edit = true
+              col.title = "Title"
+            end
+          )
+          row.cell_list.push(
+            Meteor::NamedCellColumn.new do |col|
+              col.type = :scalar
+              col.name = :isbn
+              col.edit = true
+              col.title = "ISBN"
+            end
+          )
+          row.cell_list.push(
+            Meteor::NamedCellColumn.new do |col|
+              col.type = :date
+              col.name = :publish_date
+              col.edit = true
+              col.title = "Date of publish"
+            end
+          )
+        end
+      )
+    end
+  end
+
   # GET /books
   # GET /books.xml
   def index
@@ -13,12 +61,14 @@ class BooksController < ApplicationController
   # GET /books/1
   # GET /books/1.xml
   def show
-    @book = Book.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @book }
-    end
+    renderer = Meteor::NamedCellRenderer.new(
+      :spec => meteor_spec,
+      :controller => self,
+		  :frontend => "named_cell",
+      :params => params,
+	    :id => params[:id]
+    )
+    render :inline => renderer.render, :layout => true
   end
 
   # GET /books/new
