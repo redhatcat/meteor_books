@@ -11,14 +11,14 @@ Object.extend(Object.extend(Ajax.InPlaceDateEditor.prototype,
     text = this.getText();
 
     var obj = this;
-    
+
     this.options.textarea = false;
     var textField = document.createElement("input");
     textField.obj = this;
     textField.type = "text";
     textField.name = this.options.paramName;
     textField.value = text;
-    
+
     var id;
 
     id = this.options.paramName + "_input_id";
@@ -32,7 +32,7 @@ Object.extend(Object.extend(Ajax.InPlaceDateEditor.prototype,
         textField.onblur = this.onSubmit.bind(this);
     this.editField = textField;
 
-    this.form.appendChild(this.editField);
+    this._form.appendChild(this.editField);
 
     var img = document.createElement("img");
     img.src = "/images/dhtml_calendar/calendar.gif";
@@ -49,20 +49,21 @@ Object.extend(Object.extend(Ajax.InPlaceDateEditor.prototype,
     img.style.cursor = "pointer";
     img.style.pointer = "float:right";
 
-    this.form.appendChild(img);
+    this._controls.editor = this.editField;
+    this._form.appendChild(img);
   },
 
   enterEditMode: function(evt) {
     if (this.saving) return;
     if (this.editing) return;
     this.editing = true;
-    this.onEnterEditMode();
+    this.triggerCallback('onEnterEditMode');
     if (this.options.externalControl) {
       Element.hide(this.options.externalControl);
     }
     Element.hide(this.element);
     this.createForm();
-    this.element.parentNode.insertBefore(this.form, this.element);
+    this.element.parentNode.insertBefore(this._form, this.element);
     if (!this.options.loadTextURL) Field.scrollFreeActivate(this.editField);
     // stop the event to avoid a page refresh in Safari
     if (evt) {
