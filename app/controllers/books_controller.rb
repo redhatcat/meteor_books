@@ -26,6 +26,21 @@ class BooksController < ApplicationController
               col.title = "Title"
             end
           )
+          column = Meteor::NamedCellColumn.new do |col|
+            col.type = :ref
+            col.name = :genre
+            col.edit = true
+            col.title = "Genre"
+          end
+          def column.options(object=nil)
+            [""] + Genre.find(:all,
+              :order => :name).collect{ |g| [g.name, g.id] }
+          end
+          row.cell_list.push(column)
+        end
+      )
+      spec.rows.push(
+        Meteor::NamedCellRow.new do |row|
           row.cell_list.push(
             Meteor::NamedCellColumn.new do |col|
               col.type = :scalar
