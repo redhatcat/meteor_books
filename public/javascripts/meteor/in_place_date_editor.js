@@ -35,7 +35,7 @@ Object.extend(Object.extend(Ajax.InPlaceDateEditor.prototype,
     this._form.appendChild(this.editField);
 
     var img = document.createElement("img");
-    img.src = "/images/dhtml_calendar/calendar.gif";
+    img.src = "/images/meteor/dhtml_calendar/calendar.gif";
     var img_id;
     img_id = this.options.paramName + "_date_picker_img";
     img.id = img_id;
