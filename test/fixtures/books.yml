@@ -3,11 +3,20 @@
 one:
   id: 1
   title: Hyperion
-  isbn: "0-553-28368-5"
+  isbn: 0-553-28368-5
   publish_date: 1989-06-01
+  genre_id: 1
 
 two:
   id: 2
   title: Dune
-  isbn: "0-441-17271-7"
+  isbn: 0-441-17271-7
   publish_date: 1965-01-01
+  genre_id: 1
+
+three:
+  id: 3
+  title: The Terror
+  isbn: 0-316-01744-2
+  publish_date: 2007-01-08
+  genre_id: 2
