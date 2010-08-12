@@ -4,6 +4,7 @@ class GenresController < ApplicationController
 
   def meteor_specs
     specs = []
+    specs << Widget::Header::Spec.new('Show/Edit Genre')
     specs << Meteor::Widget::NamedCell::Spec.new do |spec|
       spec.klass = Genre
       spec.controller_class = self.class
@@ -59,6 +60,7 @@ class GenresController < ApplicationController
     specs.each do |spec|
       h[spec.name] = spec
     end
+    puts h.inspect
     h
   end
 
@@ -81,6 +83,12 @@ class GenresController < ApplicationController
   # GET /genres/1.xml
   def show
     renderers = []
+    renderers << Meteor::RendererBase.new(
+      :spec => meteor_spec(:name => 'header'),
+      :controller => self,
+      :frontend => "header",
+      :id => params[:id]
+    )
     renderers << Meteor::Widget::NamedCell::Renderer.new(
       :spec => meteor_spec(:name => 'details'),
       :controller => self,
