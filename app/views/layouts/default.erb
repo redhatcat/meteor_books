@@ -13,6 +13,14 @@
 
 <p style="color: green"><%= flash[:notice] %></p>
 
+<div class="topnav">
+  <%= link_to "Authors", :controller => :authors %>
+  |
+  <%= link_to "Books", :controller => :books %>
+  |
+  <%= link_to "Genres", :controller => :genres %>
+</div>
+
 <%= yield %>
 
 </body>

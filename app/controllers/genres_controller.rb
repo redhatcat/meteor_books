@@ -1,4 +1,71 @@
 class GenresController < ApplicationController
+  include Meteor::Crud::Meteor
+  include Meteor::Crud::NamedCell
+
+  def meteor_specs
+    specs = []
+    specs << Meteor::Widget::NamedCell::Spec.new do |spec|
+      spec.klass = Genre
+      spec.controller_class = self.class
+      spec.name = "details"
+      spec.title = "Details"
+
+      spec.rows.push(
+        Meteor::Widget::NamedCell::Row.new do |row|
+          row.cell_list.push(
+            Meteor::Widget::NamedCell::Column.new do |col|
+              col.type = :scalar
+              col.name = :name
+              col.edit = true
+              col.title = "Name"
+            end
+          )
+        end
+      )
+    end
+    specs << Meteor::Widget::Meteor::Spec.new do |spec|
+      spec.klass = Book
+      spec.parent_klass = Genre
+      spec.controller_class = self.class
+      spec.title = "Books"
+      spec.name = 'books'
+      spec.columns.push(
+        Meteor::Widget::Meteor::Column.new{ |c|
+          c.name = "title"
+          c.type = :scalar
+          c.edit = true
+          c.create = true
+        }
+      )
+      spec.columns.push(
+        Meteor::Widget::Meteor::Column.new{ |c|
+          c.name = "isbn"
+          c.type = :scalar
+          c.edit = true
+          c.create = true
+        }
+      )
+      spec.columns.push(
+        Meteor::Widget::Meteor::Column.new { |c|
+          c.name = :publish_date
+          c.type = :scalar
+          c.edit = true
+          c.create = true
+        }
+      )
+    end
+
+    h = {}
+    specs.each do |spec|
+      h[spec.name] = spec
+    end
+    h
+  end
+
+  def meteor_spec(h={})
+    meteor_specs[h[:name].downcase]
+  end
+
   # GET /genres
   # GET /genres.xml
   def index
@@ -13,12 +80,22 @@ class GenresController < ApplicationController
   # GET /genres/1
   # GET /genres/1.xml
   def show
-    @genre = Genre.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @genre }
-    end
+    renderers = []
+    renderers << Meteor::Widget::NamedCell::Renderer.new(
+      :spec => meteor_spec(:name => 'details'),
+      :controller => self,
+      :frontend => "named_cell",
+      :params => params,
+      :id => params[:id]
+    )
+    renderers << Meteor::Widget::Meteor::Renderer.new(
+      :spec => meteor_spec(:name => 'books'),
+      :controller => self,
+      :frontend => "meteor",
+      :params => params,
+      :id => params[:id]
+    )
+    render :inline => renderers.collect{ |r| r.render }.join, :layout => true
   end
 
   # GET /genres/new

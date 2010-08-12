@@ -1,6 +1,5 @@
 class BooksController < ApplicationController
-  include MeteorCrud
-  include NamedCellCrud
+  include Meteor::Crud::NamedCell
 
   def meteor_specs
     h = {}
@@ -10,23 +9,23 @@ class BooksController < ApplicationController
   end
 
   def meteor_spec
-    Meteor::NamedCellSpec.new do |spec|
+    Meteor::Widget::NamedCell::Spec.new do |spec|
       spec.klass = Book
       spec.controller_class = self.class
       spec.name = "book_details"
       spec.title = "Book Details"
 
       spec.rows.push(
-        Meteor::NamedCellRow.new do |row|
+        Meteor::Widget::NamedCell::Row.new do |row|
           row.cell_list.push(
-            Meteor::NamedCellColumn.new do |col|
+            Meteor::Widget::NamedCell::Column.new do |col|
               col.type = :scalar
               col.name = :title
               col.edit = true
               col.title = "Title"
             end
           )
-          column = Meteor::NamedCellColumn.new do |col|
+          column = Meteor::Widget::NamedCell::Column.new do |col|
             col.type = :ref
             col.name = :genre
             col.edit = true
@@ -40,9 +39,9 @@ class BooksController < ApplicationController
         end
       )
       spec.rows.push(
-        Meteor::NamedCellRow.new do |row|
+        Meteor::Widget::NamedCell::Row.new do |row|
           row.cell_list.push(
-            Meteor::NamedCellColumn.new do |col|
+            Meteor::Widget::NamedCell::Column.new do |col|
               col.type = :scalar
               col.name = :isbn
               col.edit = true
@@ -50,7 +49,7 @@ class BooksController < ApplicationController
             end
           )
           row.cell_list.push(
-            Meteor::NamedCellColumn.new do |col|
+            Meteor::Widget::NamedCell::Column.new do |col|
               col.type = :date
               col.name = :publish_date
               col.edit = true
@@ -76,7 +75,7 @@ class BooksController < ApplicationController
   # GET /books/1
   # GET /books/1.xml
   def show
-    renderer = Meteor::NamedCellRenderer.new(
+    renderer = Meteor::Widget::NamedCell::Renderer.new(
       :spec => meteor_spec,
       :controller => self,
 		  :frontend => "named_cell",

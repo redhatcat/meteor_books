@@ -5,6 +5,7 @@
     <th>Title</th>
     <th>Isbn</th>
     <th>Publish date</th>
+    <th>Genre</th>
   </tr>
 
 <% @books.each do |book| %>
@@ -12,8 +13,8 @@
     <td><%=h book.title %></td>
     <td><%=h book.isbn %></td>
     <td><%=h book.publish_date %></td>
+    <td><%=h book.genre %></td>
     <td><%= link_to 'Show', book %></td>
-    <td><%= link_to 'Edit', edit_book_path(book) %></td>
     <td><%= link_to 'Destroy', book, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
 <% end %>
