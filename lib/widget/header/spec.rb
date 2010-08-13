@@ -14,7 +14,12 @@ module Widget
     #   ).render
     #
     # Hits its partial, app/views/meteor/header/_render.rhtml.
-    class Spec < Meteor::SpecBase
+
+#     def self.renderer_class
+#       ::Meteor::RendererBase
+#     end
+
+    class Spec < ::Meteor::SpecBase
       attr_accessor :text
       def initialize(text, options={},&block)
         @text = text

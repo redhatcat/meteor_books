@@ -11,10 +11,11 @@ class GenresController < ApplicationController
   # its klass via decamelization.  This name attribute is used by the
   # Crud systems when they call this method.
   def meteor_spec(h={})
-    case h[:name]
-    when 'header'
+    search_for = (h.is_a? Hash) ? h[:name] : h
+    case search_for.to_sym
+    when :header
       Widget::Header::Spec.new('Show/Edit Genre')
-    when 'genre'
+    when :genre
       Meteor::Widget::NamedCell::Spec.new do |spec|
         spec.klass = Genre
         spec.controller_class = self.class
@@ -32,7 +33,7 @@ class GenresController < ApplicationController
           end
         )
       end
-    when 'book'
+    when :book
       Meteor::Widget::Meteor::Spec.new do |spec|
         spec.klass = Book
         spec.parent_klass = Genre
@@ -80,24 +81,17 @@ class GenresController < ApplicationController
   # GET /genres/1
   # GET /genres/1.xml
   def show
-    renderers = []
-    renderers << Meteor::RendererBase.new(
-      :spec => meteor_spec(:name => 'header'),
-      :controller => self
-    )
-    renderers << Meteor::Widget::NamedCell::Renderer.new(
-      :spec => meteor_spec(:name => 'genre'),
-      :controller => self,
-      :params => params,
-      :id => params[:id]
-    )
-    renderers << Meteor::Widget::Meteor::Renderer.new(
-      :spec => meteor_spec(:name => 'book'),
-      :controller => self,
-      :params => params,
-      :id => params[:id]
-    )
-    render :inline => renderers.collect{ |r| r.render }.join, :layout => true
+    out = meteor_spec(:header).render(:controller => self)
+
+    out += meteor_spec(:genre).render(:controller => self,
+                                      :params => params,
+                                      :id => params[:id])
+
+    out += meteor_spec(:book).render(:controller => self,
+                                     :params => params,
+                                     :id => params[:id])
+
+    render :inline => out, :layout => true
   end
 
   # GET /genres/new
