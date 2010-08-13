@@ -2,6 +2,14 @@ class GenresController < ApplicationController
   include Meteor::Crud::Meteor
   include Meteor::Crud::NamedCell
 
+  # Both Meteor and NamedCell Cruds require the controller to have the
+  # following method.  This method is expected to take a hash, which
+  # only receives a :name at this point in time.  It is expected to return
+  # some instance that is a kind_of? Meteor::SpecBase.
+  #
+  # Remember that by default, a specs name attribute is derived from
+  # its klass via decamelization.  This name attribute is used by the
+  # Crud systems when they call this method.
   def meteor_spec(h={})
     case h[:name]
     when 'header'
@@ -11,7 +19,6 @@ class GenresController < ApplicationController
         spec.klass = Genre
         spec.controller_class = self.class
         spec.title = "Details"
-
         spec.rows.push(
           Meteor::Widget::NamedCell::Row.new do |row|
             row.cell_list.push(
@@ -77,8 +84,7 @@ class GenresController < ApplicationController
     renderers << Meteor::RendererBase.new(
       :spec => meteor_spec(:name => 'header'),
       :controller => self,
-      :frontend => "header",
-      :id => params[:id]
+      :frontend => "header"
     )
     renderers << Meteor::Widget::NamedCell::Renderer.new(
       :spec => meteor_spec(:name => 'genre'),
