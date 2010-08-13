@@ -15,16 +15,10 @@ module Widget
     #
     # Hits its partial, app/views/meteor/header/_render.rhtml.
     class Spec < Meteor::SpecBase
-      attr_accessor :name
       attr_accessor :text
-      attr_accessor :options
-      def initialize(text, options={})
-        defaults = {
-          :name => 'header'
-        }
+      def initialize(text, options={},&block)
         @text = text
-        @options = defaults.merge(options)
-        @name = @options[:name]
+        super(options,&block)
       end
     end
   end

@@ -83,20 +83,17 @@ class GenresController < ApplicationController
     renderers = []
     renderers << Meteor::RendererBase.new(
       :spec => meteor_spec(:name => 'header'),
-      :controller => self,
-      :frontend => "header"
+      :controller => self
     )
     renderers << Meteor::Widget::NamedCell::Renderer.new(
       :spec => meteor_spec(:name => 'genre'),
       :controller => self,
-      :frontend => "named_cell",
       :params => params,
       :id => params[:id]
     )
     renderers << Meteor::Widget::Meteor::Renderer.new(
       :spec => meteor_spec(:name => 'book'),
       :controller => self,
-      :frontend => "meteor",
       :params => params,
       :id => params[:id]
     )
