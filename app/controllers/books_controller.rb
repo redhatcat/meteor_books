@@ -1,63 +1,58 @@
 class BooksController < ApplicationController
   include Meteor::Crud::NamedCell
 
-  def meteor_specs
-    h = {}
-    spec = meteor_spec
-    h[spec.name] = spec
-    h
-  end
+  def meteor_spec(h={})
+    case h[:name]
+    when 'book'
+      Meteor::Widget::NamedCell::Spec.new do |spec|
+        spec.klass = Book
+        spec.controller_class = self.class
+        spec.title = "Book Details"
 
-  def meteor_spec
-    Meteor::Widget::NamedCell::Spec.new do |spec|
-      spec.klass = Book
-      spec.controller_class = self.class
-      spec.name = "book_details"
-      spec.title = "Book Details"
-
-      spec.rows.push(
-        Meteor::Widget::NamedCell::Row.new do |row|
-          row.cell_list.push(
-            Meteor::Widget::NamedCell::Column.new do |col|
-              col.type = :scalar
-              col.name = :title
+        spec.rows.push(
+          Meteor::Widget::NamedCell::Row.new do |row|
+            row.cell_list.push(
+              Meteor::Widget::NamedCell::Column.new do |col|
+                col.type = :scalar
+                col.name = :title
+                col.edit = true
+                col.title = "Title"
+              end
+            )
+            column = Meteor::Widget::NamedCell::Column.new do |col|
+              col.type = :ref
+              col.name = :genre
               col.edit = true
-              col.title = "Title"
+              col.title = "Genre"
             end
-          )
-          column = Meteor::Widget::NamedCell::Column.new do |col|
-            col.type = :ref
-            col.name = :genre
-            col.edit = true
-            col.title = "Genre"
+            def column.options(object=nil)
+              [""] + Genre.find(:all,
+                :order => :name).collect{ |g| [g.name, g.id] }
+            end
+            row.cell_list.push(column)
           end
-          def column.options(object=nil)
-            [""] + Genre.find(:all,
-              :order => :name).collect{ |g| [g.name, g.id] }
+        )
+        spec.rows.push(
+          Meteor::Widget::NamedCell::Row.new do |row|
+            row.cell_list.push(
+              Meteor::Widget::NamedCell::Column.new do |col|
+                col.type = :scalar
+                col.name = :isbn
+                col.edit = true
+                col.title = "ISBN"
+              end
+            )
+            row.cell_list.push(
+              Meteor::Widget::NamedCell::Column.new do |col|
+                col.type = :date
+                col.name = :publish_date
+                col.edit = true
+                col.title = "Date of publish"
+              end
+            )
           end
-          row.cell_list.push(column)
-        end
-      )
-      spec.rows.push(
-        Meteor::Widget::NamedCell::Row.new do |row|
-          row.cell_list.push(
-            Meteor::Widget::NamedCell::Column.new do |col|
-              col.type = :scalar
-              col.name = :isbn
-              col.edit = true
-              col.title = "ISBN"
-            end
-          )
-          row.cell_list.push(
-            Meteor::Widget::NamedCell::Column.new do |col|
-              col.type = :date
-              col.name = :publish_date
-              col.edit = true
-              col.title = "Date of publish"
-            end
-          )
-        end
-      )
+        )
+      end
     end
   end
 
@@ -76,7 +71,7 @@ class BooksController < ApplicationController
   # GET /books/1.xml
   def show
     renderer = Meteor::Widget::NamedCell::Renderer.new(
-      :spec => meteor_spec,
+      :spec => meteor_spec(:name => 'book'),
       :controller => self,
 		  :frontend => "named_cell",
       :params => params,

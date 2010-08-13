@@ -2,70 +2,61 @@ class GenresController < ApplicationController
   include Meteor::Crud::Meteor
   include Meteor::Crud::NamedCell
 
-  def meteor_specs
-    specs = []
-    specs << Widget::Header::Spec.new('Show/Edit Genre')
-    specs << Meteor::Widget::NamedCell::Spec.new do |spec|
-      spec.klass = Genre
-      spec.controller_class = self.class
-      spec.name = "details"
-      spec.title = "Details"
-
-      spec.rows.push(
-        Meteor::Widget::NamedCell::Row.new do |row|
-          row.cell_list.push(
-            Meteor::Widget::NamedCell::Column.new do |col|
-              col.type = :scalar
-              col.name = :name
-              col.edit = true
-              col.title = "Name"
-            end
-          )
-        end
-      )
-    end
-    specs << Meteor::Widget::Meteor::Spec.new do |spec|
-      spec.klass = Book
-      spec.parent_klass = Genre
-      spec.controller_class = self.class
-      spec.title = "Books"
-      spec.name = 'books'
-      spec.columns.push(
-        Meteor::Widget::Meteor::Column.new{ |c|
-          c.name = "title"
-          c.type = :scalar
-          c.edit = true
-          c.create = true
-        }
-      )
-      spec.columns.push(
-        Meteor::Widget::Meteor::Column.new{ |c|
-          c.name = "isbn"
-          c.type = :scalar
-          c.edit = true
-          c.create = true
-        }
-      )
-      spec.columns.push(
-        Meteor::Widget::Meteor::Column.new { |c|
-          c.name = :publish_date
-          c.type = :scalar
-          c.edit = true
-          c.create = true
-        }
-      )
-    end
-
-    h = {}
-    specs.each do |spec|
-      h[spec.name] = spec
-    end
-    puts h.inspect
-    h
-  end
-
   def meteor_spec(h={})
-    meteor_specs[h[:name].downcase]
+    case h[:name]
+    when 'header'
+      Widget::Header::Spec.new('Show/Edit Genre')
+    when 'genre'
+      Meteor::Widget::NamedCell::Spec.new do |spec|
+        spec.klass = Genre
+        spec.controller_class = self.class
+        spec.title = "Details"
+
+        spec.rows.push(
+          Meteor::Widget::NamedCell::Row.new do |row|
+            row.cell_list.push(
+              Meteor::Widget::NamedCell::Column.new do |col|
+                col.type = :scalar
+                col.name = :name
+                col.edit = true
+                col.title = "Name"
+              end
+            )
+          end
+        )
+      end
+    when 'book'
+      Meteor::Widget::Meteor::Spec.new do |spec|
+        spec.klass = Book
+        spec.parent_klass = Genre
+        spec.controller_class = self.class
+        spec.title = "Books"
+        spec.columns.push(
+          Meteor::Widget::Meteor::Column.new{ |c|
+            c.name = "title"
+            c.type = :scalar
+            c.edit = true
+            c.create = true
+          }
+        )
+        spec.columns.push(
+          Meteor::Widget::Meteor::Column.new{ |c|
+            c.name = "isbn"
+            c.type = :scalar
+            c.edit = true
+            c.create = true
+          }
+        )
+        spec.columns.push(
+          Meteor::Widget::Meteor::Column.new { |c|
+            c.name = :publish_date
+            c.type = :scalar
+            c.edit = true
+            c.create = true
+          }
+        )
+      end
+    end
   end
 
   # GET /genres
@@ -90,14 +81,14 @@ class GenresController < ApplicationController
       :id => params[:id]
     )
     renderers << Meteor::Widget::NamedCell::Renderer.new(
-      :spec => meteor_spec(:name => 'details'),
+      :spec => meteor_spec(:name => 'genre'),
       :controller => self,
       :frontend => "named_cell",
       :params => params,
       :id => params[:id]
     )
     renderers << Meteor::Widget::Meteor::Renderer.new(
-      :spec => meteor_spec(:name => 'books'),
+      :spec => meteor_spec(:name => 'book'),
       :controller => self,
       :frontend => "meteor",
       :params => params,
