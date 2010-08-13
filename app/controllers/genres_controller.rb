@@ -1,6 +1,17 @@
+
 class GenresController < ApplicationController
   include Meteor::Crud::Meteor
   include Meteor::Crud::NamedCell
+
+  def render_meteor_widget(name,h={})
+    spec=meteor_spec(name)
+    call_args = {
+      :controller => self,
+      :params => request.params
+    }
+    spec.render(call_args.merge!(h))
+  end
+
 
   # Both Meteor and NamedCell Cruds require the controller to have the
   # following method.  This method is expected to take a hash, which
@@ -81,15 +92,11 @@ class GenresController < ApplicationController
   # GET /genres/1
   # GET /genres/1.xml
   def show
-    out = meteor_spec(:header).render(:controller => self)
+    out = render_meteor_widget(:header)
 
-    out += meteor_spec(:genre).render(:controller => self,
-                                      :params => params,
-                                      :id => params[:id])
+    out += render_meteor_widget(:genre,:id => params[:id])
 
-    out += meteor_spec(:book).render(:controller => self,
-                                     :params => params,
-                                     :id => params[:id])
+    out += render_meteor_widget(:book,:id => params[:id])
 
     render :inline => out, :layout => true
   end
