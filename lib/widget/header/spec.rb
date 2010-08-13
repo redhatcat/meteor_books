@@ -15,7 +15,6 @@ module Widget
     #
     # Hits its partial, app/views/meteor/header/_render.rhtml.
     class Spec < Meteor::SpecBase
-      attr_accessor :name
       attr_accessor :text
       attr_accessor :options
       def initialize(text, options={})
