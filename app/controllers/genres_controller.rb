@@ -3,16 +3,6 @@ class GenresController < ApplicationController
   include Meteor::Crud::Meteor
   include Meteor::Crud::NamedCell
 
-  def render_meteor_widget(name,h={})
-    spec=meteor_spec(name)
-    call_args = {
-      :controller => self,
-      :params => request.params
-    }
-    spec.render(call_args.merge!(h))
-  end
-
-
   # Both Meteor and NamedCell Cruds require the controller to have the
   # following method.  This method is expected to take a hash, which
   # only receives a :name at this point in time.  It is expected to return
@@ -25,7 +15,7 @@ class GenresController < ApplicationController
     search_for = (h.is_a? Hash) ? h[:name] : h
     case search_for.to_sym
     when :header
-      Widget::Header::Spec.new('Show/Edit Genre')
+      ::Widget::Header::Spec.new('Show/Edit Genre')
     when :genre
       Meteor::Widget::NamedCell::Spec.new do |spec|
         spec.klass = Genre
@@ -93,6 +83,9 @@ class GenresController < ApplicationController
   # GET /genres/1.xml
   def show
     out = render_meteor_widget(:header)
+
+    out += ::Widget::Header::Spec.new('Show/Edit Genre!').render(:controller => self,
+                                                                 :params => params)
 
     out += render_meteor_widget(:genre,:id => params[:id])
 
