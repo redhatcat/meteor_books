@@ -1,8 +1,6 @@
-<p>
-  <b>Name:</b>
-  <%=h @genre.name %>
-</p>
 
+<%= render_meteor_widget(::Widget::Header::Spec.new('Show/Edit Genre')) -%>
 
-<%= link_to 'Edit', edit_genre_path(@genre) %> |
-<%= link_to 'Back', genres_path %>
+<%= render_meteor_widget_by_name(:genre,:id => params["id"]) -%>
+
+<%= render_meteor_widget_by_name(:book,:id => params["id"]) -%>

@@ -82,16 +82,7 @@ class GenresController < ApplicationController
   # GET /genres/1
   # GET /genres/1.xml
   def show
-    out = render_meteor_widget(:header)
-
-    out += ::Widget::Header::Spec.new('Show/Edit Genre!').render(:controller => self,
-                                                                 :params => params)
-
-    out += render_meteor_widget(:genre,:id => params[:id])
-
-    out += render_meteor_widget(:book,:id => params[:id])
-
-    render :inline => out, :layout => true
+    
   end
 
   # GET /genres/new
