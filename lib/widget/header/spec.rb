@@ -6,18 +6,11 @@ module Widget
     #
     # Can be rendered with the following:
     #
-    #   Meteor::RendererBase.new(
-    #     :spec => Widget::Header::Spec.new("Hello, world!"),
-    #     :controller => self,
-    #     :frontend => "header",
-    #     :id => params[:id]
-    #   ).render
+    # <%= render_meteor_widget(::Widget::Header::Spec.new('Show/Edit Genre')) -%>
     #
+    #
+    #   
     # Hits its partial, app/views/meteor/header/_render.rhtml.
-
-#     def self.renderer_class
-#       ::Meteor::RendererBase
-#     end
 
     class Spec < ::Meteor::SpecBase
       attr_accessor :text
