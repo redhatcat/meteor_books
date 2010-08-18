@@ -159,7 +159,7 @@ document.onclick=hidemenu
 <script type="text/javascript">
 
 /***********************************************
-* AnyLink Drop Down Menu- © Dynamic Drive (www.dynamicdrive.com)
+* AnyLink Drop Down Menu- Â© Dynamic Drive (www.dynamicdrive.com)
 * This notice MUST stay intact for legal use
 * Visit http://www.dynamicdrive.com/ for full source code
 ***********************************************/
@@ -167,13 +167,13 @@ document.onclick=hidemenu
 //Contents for smconsole
 
 
-var <%= spec.name -%>=new Array() 
+var <%= spec.name -%>=new Array()
 <%
      ndx=0
      spec.menu_items.each do |name,url| -%>
 <%= spec.name %>[<%= ndx -%>] = '<a href="<%= url -%>"><%= name.humanize %></a>'
 <%   ndx += 1
-     end 
+     end
 -%>
 
 var menuwidth='165px' //default menu width
