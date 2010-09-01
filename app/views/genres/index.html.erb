@@ -17,3 +17,6 @@
 <br />
 
 <%= link_to 'New genre', new_genre_path %>
+<br/>
+<%= render_meteor_widget(::Meteor::Widget::CountdownTimer::Spec.new(:day => "02", :month => "09", :year => "2010"))%>
+
