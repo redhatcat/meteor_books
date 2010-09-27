@@ -15,12 +15,12 @@
 
 <div class="topnav">
 
-<%= render_meteor_widget(::Meteor::Widget::SimpleDhtmlMenu::Spec.new(:name => "Objects",
-                                                                     :menu_items => [
-                                                                                     ["Genres","/genres"],
-                                                                                     ["Books","/books"],
-                                                                                     ["Authors","/authors"],
-                                                                                    ])) %>
+<%= render_meteor_widget(::Meteor::Widget::DhtmlMenu::Spec.new(:name => "Objects",
+                                                               :menu_items => [
+                                                                               ["Genres","/genres"],
+                                                                               ["Books","/books"],
+                                                                               ["Authors","/authors"],
+                                                                              ])) %>
 
 </div>
 
