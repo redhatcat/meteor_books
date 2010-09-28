@@ -1,0 +1,27 @@
+<: # -*-sh-*-
+use Helpers::shellHelpers; # $m80path = [{command => "embedperl"}, {command => "m4", chmod => "+x" }];
+print Helpers::shellHelpers::shellScript ( r => [],
+                                           getopts => '(s,-submodule)');
+:>
+
+status () {
+    docmd git submodule status
+}
+
+status
+
+app=$(basename $(dirname `pwd`))
+
+#for submodule in meteor; do
+    submodule_path=vendor/plugins/$submodule
+    docmd cd $submodule_path
+    docmd git pull origin master
+    docmd cd ../../..
+    docmd git commit -m \'"updating $submodule in application $app"\' $submodule_path
+    status
+    docmd git push origin master
+#done
+
+cleanup 0
+
+    
