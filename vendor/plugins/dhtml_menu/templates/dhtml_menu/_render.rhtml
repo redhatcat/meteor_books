@@ -184,7 +184,30 @@ var hidemenu_onclick="yes" //hide menu when user clicks within menu?
 
 
 <style type="text/css">
-a.menu { text-decoration:none }
+a.menu { 
+text-decoration:none 
+display: block;
+background-color: transparent;
+background-image: url(buttonBackground.gif);
+background-repeat: no-repeat;
+width: 132px;
+height: 28px;
+margin: 5px auto;
+padding: 5px 0 0 0;
+text-align: center;
+font-family: Helvetica, Calibri, Arial, sans-serif;
+font-size: 100%;
+font-weight: bold;
+text-decoration: none;
+}
+
+a.menu:link, a.menu:visited {
+color: #002577;
+}
+a.menu:hover, a.menu:active {
+background-position: 0 -36px;
+color: #FF7200;
+}
 </style>
 
 <a class="menu" href="<%= spec.name %>.htm" onClick="return clickreturnvalue()" onMouseover="dropdownmenu(this, event, <%= spec.name %>, '300px')" onMouseout="delayhidemenu()"><%= spec.name.humanize %></a>
